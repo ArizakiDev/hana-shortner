@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - URL Shortener</title>
+</head>
+<body>
+  <h1>Admin - URL Shortener</h1>
+  <h2>Shortened URLs</h2>
+  <table border="1">
+    <tr>
+      <th>Original URL</th>
+      <th>Short URL</th>
+      <th>Created At</th>
+      <th>Actions</th>
+    </tr>
+    <% if (urls && urls.length > 0) { %>
+      <% urls.forEach(url => { %>
+        <tr>
+          <td><%= url.originalUrl %></td>
+          <td><a href="<%= url.shortUrl %>" target="_blank"><%= url.shortUrl %></a></td>
+          <td><%= url.createdAt %></td>
+          <td>
+            <form action="/admin/delete" method="POST" style="display:inline;">
+              <input type="hidden" name="id" value="<%= url._id %>">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    <% } else { %>
+      <tr>
+        <td colspan="4">No URLs found</td>
+      </tr>
+    <% } %>
+  </table>
+
+  <h2>Custom URLs</h2>
+  <form action="/admin/custom" method="POST">
+    <label for="code">Code:</label>
+    <input type="text" id="code" name="code" required>
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url" required>
+    <button type="submit">Add Custom URL</button>
+  </form>
+
+  <table border="1">
+    <tr>
+      <th>Code</th>
+      <th>URL</th>
+    </tr>
+    <% for (const [code, url] of Object.entries(customUrls)) { %>
+      <tr>
+        <td><%= code %></td>
+        <td><a href="<%= url %>" target="_blank"><%= url %></a></td>
+      </tr>
+    <% } %>
+  </table>
+
+  <a href="/admin/logout">Logout</a>
+</body>
+</html>

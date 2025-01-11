@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0a0a16;
+            --text-color: #e2e8f0;
+            --accent-color: #10b981;
+            --secondary-color: #3b82f6;
+            --error-color: #f43f5e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .space-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #1a1a3a 0%, var(--bg-color) 100%);
+            z-index: -1;
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20px 30px, #eee, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 40px 70px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 50px 160px, #ddd, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 90px 40px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 130px 80px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 4s ease-in-out infinite;
+            opacity: 0.5;
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .glitch-404 {
+            font-size: 8rem;
+            font-weight: 600;
+            position: relative;
+            text-shadow: 0.05em 0 0 var(--accent-color),
+                         -0.025em -0.05em 0 var(--secondary-color),
+                         0.025em 0.05em 0 var(--error-color);
+            animation: glitch 2s ease-in-out infinite alternate-reverse;
+        }
+
+        .error-title {
+            font-size: 2rem;
+            margin: 1rem 0;
+            color: var(--text-color);
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.5s forwards;
+        }
+
+        .error-message {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            color: #94a3b8;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.7s forwards;
+        }
+
+        .space-button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.9s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .space-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .space-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .space-button:hover::before {
+            left: 100%;
+        }
+
+        .meteor {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            opacity: 0;
+            transform: rotate(-45deg);
+            animation: meteor 2s linear infinite;
+        }
+
+        @keyframes glitch {
+            0% {
+                text-shadow: 0.05em 0 0 var(--accent-color),
+                            -0.025em -0.05em 0 var(--secondary-color),
+                            0.025em 0.05em 0 var(--error-color);
+            }
+            14% {
+                text-shadow: 0.05em 0 0 var(--accent-color),
+                            -0.025em -0.05em 0 var(--secondary-color),
+                            0.025em 0.05em 0 var(--error-color);
+            }
+            15% {
+                text-shadow: -0.05em -0.025em 0 var(--accent-color),
+                            0.025em 0.025em 0 var(--secondary-color),
+                            -0.05em -0.05em 0 var(--error-color);
+            }
+            49% {
+                text-shadow: -0.05em -0.025em 0 var(--accent-color),
+                            0.025em 0.025em 0 var(--secondary-color),
+                            -0.05em -0.05em 0 var(--error-color);
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 var(--accent-color),
+                            0.05em 0 0 var(--secondary-color),
+                            0 -0.05em 0 var(--error-color);
+            }
+            99% {
+                text-shadow: 0.025em 0.05em 0 var(--accent-color),
+                            0.05em 0 0 var(--secondary-color),
+                            0 -0.05em 0 var(--error-color);
+            }
+            100% {
+                text-shadow: -0.025em 0 0 var(--accent-color),
+                            -0.025em -0.025em 0 var(--secondary-color),
+                            -0.025em -0.05em 0 var(--error-color);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes meteor {
+            0% {
+                transform: translateX(0) translateY(0) rotate(-45deg);
+                opacity: 1;
+            }
+            70% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-500px) translateY(500px) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .glitch-404 {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 1.5rem;
+            }
+            
+            .error-message {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="space-background"></div>
+    <div class="stars"></div>
+    <% for (let i = 0; i < 5; i++) { %>
+        <div class="meteor" style="top: <%= Math.random() * 100 %>%; left: <%= Math.random() * 100 + 50 %>%; animation-delay: <%= Math.random() * 2 %>s;"></div>
+    <% } %>
+    
+    <main class="error-container">
+        <h1 class="glitch-404">404</h1>
+        <h2 class="error-title">Houston, we have a problem!</h2>
+        <p class="error-message">The page you're looking for has drifted into deep space.</p>
+        <a href="/" class="space-button">Return to Home Base</a>
+    </main>
+
+    <script>
+        // Ajoute dynamiquement des météores
+        setInterval(() => {
+            const meteor = document.createElement('div');
+            meteor.className = 'meteor';
+            meteor.style.top = Math.random() * 100 + '%';
+            meteor.style.left = (Math.random() * 100 + 50) + '%';
+            document.body.appendChild(meteor);
+            
+            setTimeout(() => {
+                meteor.remove();
+            }, 2000);
+        }, 3000);
+    </script>
+</body>
+</html>

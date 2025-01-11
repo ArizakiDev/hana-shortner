@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="<%= currentLang || 'fr' %>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hana Shortner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta property="og:image" content="https://imgur.com/GmmFKa9.png">
+    <meta property="og:description" content="<%= translations.subtitle %>">
+    <meta property="og:title" content="Hana Shortner">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://imgur.com/GmmFKa9.png">
+    <meta name="twitter:description" content="<%= translations.subtitle %>">
+    <meta name="twitter:title" content="Hana Shortner">
+    <meta name="author" content="Arizaki.xyz">
+    <meta name="keywords" content="raccourcisseur d'URL, URL courte, lien court, URL shortener">
+    <meta name="theme-color" content="#9333ea">
+    <link rel="icon" href="favicon.ico" type="image/png">
+</head>
+<body class="dark-theme">
+    <div class="loading-bar"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="gradient-text">Hana Shortner</span>
+            </div>
+
+            <div class="nav-center">
+                <div class="nav-links">
+                    <a href="/" class="nav-link active">
+                        <span class="link-text" data-fr="Accueil" data-en="Home"><%= translations.title %></span>
+                    </a>
+                    <a href="/results" class="nav-link">
+                        <span class="link-text" data-fr="Résultats" data-en="Results">Résultats</span>
+                    </a>
+                    <a href="/admin" class="nav-link">
+                        <span class="link-text">Admin</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="nav-right">
+                <select class="language-selector" id="languageSelect">
+                    <option value="fr">Français</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <div class="content-wrapper">
+            <h1 class="title">
+                <span class="title-text" data-fr="Transformez Vos Liens" data-en="Transform Your Links">
+                    <%= translations.title %>
+                </span>
+            </h1>
+            <p class="subtitle">
+                <span data-fr="Créez des liens courts et puissants en quelques secondes"
+                      data-en="Create short, powerful links in seconds">
+                    <%= translations.subtitle %>
+                </span>
+            </p>
+
+            <div class="card">
+                <form action="/shorten" method="POST" class="url-form" id="shortenForm">
+                    <div class="input-group">
+                        <label for="originalUrl" class="input-label">
+                            <span data-fr="Entrez votre URL longue" data-en="Enter your long URL">
+                                <%= translations.urlPlaceholder %>
+                            </span>
+                        </label>
+                        <div class="input-wrapper">
+                            <input
+                                type="url"
+                                id="originalUrl"
+                                name="originalUrl"
+                                class="input-field"
+                                placeholder="<%= translations.urlPlaceholder %>"
+                                required
+                            >
+                            <div class="input-focus-effect"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="submit-button">
+                        <span class="button-text" data-fr="Raccourcir l'URL" data-en="Shorten URL">
+                            <%= translations.buttonText %>
+                        </span>
+                        <span class="button-icon">→</span>
+                    </button>
+                </form>
+
+                <div class="stats-container">
+                    <div class="stat-item">
+                        <span class="stat-value"><%= maxUrlsPerDay %></span>
+                        <span class="stat-label" data-fr="URLs par jour" data-en="URLs per day">
+                            <%= translations.maxPerDay %>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-stats">
+                <div class="footer-stat">
+                    <span class="stat-value"><%= totalUrls %></span>
+                    <span class="stat-label" data-fr="URLs créées" data-en="URLs created">
+                        <%= translations.totalUrls %>
+                    </span>
+                </div>
+                <div class="footer-stat">
+                    <span class="stat-value"><%= activeUrls %></span>
+                    <span class="stat-label" data-fr="URLs actives" data-en="Active URLs">
+                        <%= translations.activeUrls %>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const body = document.body;
+
+        // Gestion du formulaire
+        const form = document.getElementById('shortenForm');
+        form.addEventListener('submit', (e) => {
+            form.classList.add('submitting');
+        });
+
+        // Gestion de la langue
+        const languageSelect = document.getElementById('languageSelect');
+        languageSelect.addEventListener('change', (e) => {
+            const lang = e.target.value;
+            document.documentElement.lang = lang;
+
+            const elements = document.querySelectorAll('[data-' + lang + ']');
+            elements.forEach(element => {
+                element.textContent = element.getAttribute('data-' + lang);
+            });
+
+            // Mise à jour du placeholder
+            const urlInput = document.getElementById('originalUrl');
+            urlInput.placeholder = lang === 'fr' ?
+                'https://votre-url-longue.com' :
+                'https://your-long-url.com';
+        });
+    </script>
+    <style>
+        :root {
+            --primary: #9333ea;
+            --primary-dark: #7928ca;
+            --secondary: #e879f9;
+            --bg-dark: #1a1a2e;
+            --card-bg: #2a2a4a;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Custom Background Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(232, 121, 249, 0.1) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 30L40 30M30 20L30 40' stroke='rgba(147, 51, 234, 0.1)' stroke-width='2'/%3E%3C/svg%3E");
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .navbar {
+            background: rgba(42, 42, 74, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(147, 51, 234, 0.2);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--secondary), var(--primary));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link:hover::after {
+            transform: scaleX(1);
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 7rem auto 2rem;
+            padding: 0 1.5rem;
+        }
+
+        .title-container {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .url-card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(147, 51, 234, 0.1);
+            border: 1px solid rgba(147, 51, 234, 0.2);
+            animation: cardFloat 6s ease-in-out infinite;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(26, 26, 46, 0.8);
+            border: 2px solid rgba(147, 51, 234, 0.2);
+            border-radius: 0.5rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.15);
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .submit-button:hover::before {
+            left: 100%;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.3);
+        }
+
+        .stats {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(147, 51, 234, 0.2);
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        @keyframes titleGlow {
+            from {
+                filter: drop-shadow(0 0 2px rgba(147, 51, 234, 0.5));
+            }
+            to {
+                filter: drop-shadow(0 0 10px rgba(147, 51, 234, 0.8));
+            }
+        }
+
+        @keyframes cardFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+
+            .main-container {
+                margin-top: 5rem;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+
+        .language-selector {
+        background: var(--card-bg);
+        border: 2px solid rgba(147, 51, 234, 0.2);
+        color: var(--text-primary);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+
+    .language-selector:hover {
+        border-color: var(--primary);
+    }
+
+    .language-selector:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.15);
+    }
+
+    .footer {
+        margin-top: auto;
+        padding: 2rem 0;
+        background: rgba(26, 26, 46, 0.5);
+        backdrop-filter: blur(10px);
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .footer-stats {
+        display: flex;
+        justify-content: center;
+        gap: 4rem;
+    }
+
+    .footer-stat {
+        text-align: center;
+    }
+
+    .nav-center {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .nav-right {
+        display: flex;
+        align-items: center;
+    }
+
+    @media (max-width: 768px) {
+        .nav-container {
+            flex-direction: column;
+            gap: 1rem;
+            padding: 1rem;
+        }
+
+        .footer-stats {
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .language-selector {
+            margin-top: 1rem;
+        }
+    }
+    </style>
+</body>
+</html>
