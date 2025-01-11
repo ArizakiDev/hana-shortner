@@ -25,14 +25,19 @@
             <div class="nav-logo">
                 <span class="gradient-text">Hana Shortner</span>
             </div>
+            <button class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
             <div class="nav-center">
                 <div class="nav-links">
                     <a href="/" class="nav-link active">
                         <span class="link-text" data-fr="Accueil" data-en="Home"><%= translations.title %></span>
                     </a>
-                    <a href="/results" class="nav-link">
-                        <span class="link-text" data-fr="Résultats" data-en="Results">Résultats</span>
+                    <a href="/urls" class="nav-link">
+                        <span class="link-text" data-fr="Tous les liens" data-en="All links">Tous les liens</span>
                     </a>
                     <a href="/admin" class="nav-link">
                         <span class="link-text">Admin</span>
@@ -149,6 +154,15 @@
                 'https://votre-url-longue.com' :
                 'https://your-long-url.com';
         });
+
+        const menuBtn = document.querySelector('.mobile-menu-toggle');
+const navCenter = document.querySelector('.nav-center');
+const navRight = document.querySelector('.nav-right');
+
+menuBtn.addEventListener('click', () => {
+    navCenter.classList.toggle('active');
+    navRight.classList.toggle('active');
+});
     </script>
     <style>
         :root {
@@ -210,6 +224,52 @@
             justify-content: space-between;
             align-items: center;
         }
+
+        .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.mobile-menu-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text-primary);
+    margin: 5px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .nav-container {
+        justify-content: space-between;
+        flex-direction: row;
+    }
+
+    .nav-center, .nav-right {
+        display: none;
+    }
+
+    .nav-center.active, .nav-right.active {
+        display: flex;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--card-bg);
+        padding: 1rem;
+        flex-direction: column;
+        align-items: center;
+    }
+}
 
         .nav-logo {
             font-size: 1.5rem;
@@ -466,22 +526,104 @@
         align-items: center;
     }
 
+
+    /* Responsive Design */
     @media (max-width: 768px) {
-        .nav-container {
-            flex-direction: column;
-            gap: 1rem;
-            padding: 1rem;
+            :root {
+                --container-padding: 1rem;
+            }
+
+            .nav-mobile-header {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .nav-content {
+                display: none;
+                position: absolute;
+                top: var(--mobile-nav-height);
+                left: 0;
+                width: 100%;
+                background: var(--card-bg);
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-content.active {
+                display: flex;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .nav-link {
+                padding: 0.75rem 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .language-selector {
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .footer-stats {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
         }
 
-        .footer-stats {
-            flex-direction: column;
-            gap: 2rem;
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.75rem;
+            }
+
+            .card {
+                padding: 1rem;
+            }
+
+            .input-field {
+                padding: 0.75rem;
+            }
+
+            .submit-button {
+                padding: 0.75rem;
+            }
         }
 
-        .language-selector {
-            margin-top: 1rem;
+        /* Animations */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-1rem);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
-    }
+
+        .nav-content.active {
+            animation: slideDown 0.3s ease forwards;
+        }
     </style>
 </body>
 </html>
